@@ -4,7 +4,7 @@
 <head>
 <title>Who's on-line?</title>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=0.85">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
@@ -147,12 +147,13 @@
 	var users = [];
 	var userTemplate = Handlebars.compile($("#user-template").html());
 	var hostsTemplate = Handlebars.compile($("#hosts-template").html());
-	var latch = 1;
 	var container = $("#content");
 	
-	$.get("users.json", function(data) {
-		users = data;
-		updateView();
+	$(document).ready( function () {
+		$.get("users.json", function(data) {
+			users = data;
+			refresh();
+		});
 	});
 
 	function refresh() {
@@ -172,10 +173,6 @@
 	
 	function updateView(machines, start) {
 		$("#date").text(start);
-		if (latch == 1) {
-			latch--;
-			return;
-		}
 
 		container.html("");
 		$.each(users, function() {
@@ -193,7 +190,6 @@
 		});
 		container.append(hostsTemplate({ hosts : Object.keys(machines).length }));
 	}
-	refresh();
 </script>
 </body>
 </html>
